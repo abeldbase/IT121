@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+  </head>
+  <body>
+    <h1>User Profile</h1>
+
+    <script>
+      function translateToPigLatin(word) {
+        // Check if the input is empty or a single-letter word
+        if (!word || word.length === 1) {
+          return "Input can't be translated.";
+        }
+
+        // Convert the word to lowercase for case-insensitivity
+        const lowercasedWord = word.toLowerCase();
+
+        // Check if the word starts with a vowel
+        if (/^[aeiou]/.test(lowercasedWord)) {
+          return lowercasedWord + "way";
+        } else {
+          // Check if the word starts with one or two consonants
+          const match = lowercasedWord.match(/^[^aeiou]{1,2}/);
+          if (match) {
+            const consonants = match[0];
+            return lowercasedWord.slice(consonants.length) + consonants + "ay";
+          } else {
+            // If no match, the input can't be translated
+            return "Input can't be translated.";
+          }
+        }
+      }
+
+      // Example usage:
+      const userInput = prompt("Enter a word or phrase:");
+      const words = userInput.split(/\s+/); // Split input into words
+
+      // Translate each word and print the result
+      const translatedWords = words.map(translateToPigLatin);
+      console.log(translatedWords.join(" "));
+    </script>
+  </body>
+</html>
