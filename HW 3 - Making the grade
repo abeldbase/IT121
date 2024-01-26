@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student grade</title>
+</head>
+<body>
+
+<script>
+    const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
+
+    let grades = "jim|25, sue|32, mary|34, ann|22, ted|28, frank|15, lisa|19, mike|30, ahn|26, vishaya|27";
+
+    // Split the string into an array of students
+    let students = grades.split(', ');
+
+    // Arrays to store names and scores separately
+    let names = [];
+    let scores = [];
+
+    // Variables for total students, lowest, highest, and average scores
+    let totalStudents = 0;
+    let lowestScore = Infinity;
+    let highestScore = -Infinity;
+    let totalScore = 0;
+
+    // Loop through the student data
+    students.forEach(student => {
+        let [name, score] = student.split('|');
+        name = capitalizeFirstLetter(name.trim()); // Capitalize the first letter and remove extra spaces
+        let grade = parseInt(score, 10); // Convert grade to number
+        names.push(name);
+        scores.push(grade);
+
+        // Update total students and total score
+        totalStudents++;
+        totalScore += grade;
+
+        // Update lowest and highest scores
+        if (grade < lowestScore) {
+            lowestScore = grade;
+        }
+        if (grade > highestScore) {
+            highestScore = grade;
+        }
+    });
+
+    // Calculate average score
+    let averageScore = totalScore / totalStudents;
+
+    // Display each student name and score
+    document.write("<h2>Student Data:</h2>");
+    names.forEach((name, index) => {
+        document.write(`<p>${name} - ${scores[index]}</p>`);
+    });
+
+    // Display total number of students
+    document.write(`<p><strong>Total number of students:</strong> ${totalStudents}</p>`);
+
+    // Display lowest, highest, and average scores
+    document.write(`<p><strong>Lowest score:</strong> ${lowestScore}</p>`);
+    document.write(`<p><strong>Highest score:</strong> ${highestScore}</p>`);
+    document.write(`<p><strong>Average score:</strong> ${averageScore.toFixed(2)}</p>`);
+</script>
+
+</body>
+</html>
