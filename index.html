@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+</head>
+
+<body>
+
+    <h1>Functions &amp; validation</h1>
+
+    <form id="form1" action="#" onsubmit="return validateForm(this);">
+        First Name: <input type="text" name="firstname"><br>
+        Last Name: <input type="text" name="lastname"><br>
+        Password: <input type="text" name="password"><br>
+
+        <button type="submit">Check</button>
+    </form>
+
+    <hr>
+    <div id="message"></div>
+
+    <script>
+        // Move the validatePassword and validateForm functions outside the onsubmit handler
+
+        function validatePassword(password) {
+            // Minimum length of 8 characters
+            if (password.length < 8) {
+                return false;
+            }
+
+            // Contains at least one uppercase letter
+            if (!/[A-Z]/.test(password)) {
+                return false;
+            }
+
+            // Contains at least one lowercase letter
+            if (!/[a-z]/.test(password)) {
+                return false;
+            }
+
+            // If all conditions are met, return true (indicating a valid password)
+            return true;
+        }
+
+        function validateForm(myForm) {
+            // Get user-entered values
+            let firstName = myForm.firstname.value;
+            let lastName = myForm.lastname.value;
+            let password = myForm.password.value;
+
+            // Validate password
+            if (!validatePassword(password)) {
+                $("#message").html("Invalid password. Password should have at least 8 characters, at least one uppercase letter, and at least one lowercase letter.");
+                return false;
+            }
+
+            // Verify first and last name values are NOT missing
+            if (!firstName.trim() || !lastName.trim()) {
+                $("#message").html("Please enter both first and last names.");
+                return false;
+            }
+
+            // If all fields are valid, show a success message
+            $("#message").html("All fields are valid!");
+            return false; // prevent page reload
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+</body></html>
