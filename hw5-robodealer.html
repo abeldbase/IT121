@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robo Dealer</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #0066cc;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #hand {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    p {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Robo Dealer</h1>
+  <button onclick="dealNewHand()">Deal New Hand</button>
+  <div id="hand"></div>
+
+    <script>
+    // Define Card object
+    function Card(value, suit) {
+      this.value = value;
+      this.suit = suit;
+      this.name = getCardName(value);
+    }
+
+    // Function to get card name
+    function getCardName(value) {
+      const faceCards = { 11: 'Jack', 12: 'Queen', 13: 'King', 14: 'Ace' };
+      return faceCards[value] || value.toString();
+    }
+
+    // Generate a deck of 52 cards
+    function generateDeck() {
+      const suits = ['Hearts', 'Spades', 'Diamonds', 'Clubs'];
+      const deck = [];
+
+      for (let value = 2; value <= 14; value++) {
+        for (let suit of suits) {
+          deck.push(new Card(value, suit));
+        }
+      }
+
+      return deck;
+    }
+
+    // Function to randomly select 5 cards without reusing
+    function dealHand(deck, drawnCards) {
+      const hand = [];
+
+      for (let i = 0; i < 5; i++) {
+        const availableCards = deck.filter(card => !drawnCards.includes(card));
+        if (availableCards.length === 0) {
+          alert('All cards have been drawn. Reshuffling the deck.');
+          drawnCards.length = 0; // Reset drawn cards
+        }
+
+        const randomIndex = Math.floor(Math.random() * availableCards.length);
+        const card = availableCards[randomIndex];
+        drawnCards.push(card);
+        hand.push(card);
+      }
+
+      return hand;
+    }
+
+    // Display the hand on the HTML page
+    function displayHand(hand) {
+      const handContainer = document.getElementById('hand');
+      handContainer.innerHTML = ''; // Clear currently-displayed hand
+
+      hand.forEach(card => {
+        const cardElement = document.createElement('p');
+        cardElement.textContent = `${card.name} of ${card.suit}`;
+        handContainer.appendChild(cardElement);
+      });
+    }
+
+    // Function to deal a new hand
+    function dealNewHand() {
+      const deck = generateDeck();
+      const drawnCards = [];
+      const hand = dealHand(deck, drawnCards);
+      displayHand(hand);
+    }
+
+
+
+    // Initial deal on page load
+
+  </script>
+</body>
+</html>
