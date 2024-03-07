@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5-Day Weather Forecast in the United States</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .header {
+        background-color: #95da46;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+    .news-bar {
+        background-color: #f44336;
+        color: white;
+        padding: 10px;
+        text-align: center;
+    }
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    h2 {
+        margin-top: 0;
+    }
+    form {
+        margin-bottom: 20px;
+    }
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    #weather-output {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .forecast-item {
+        margin-bottom: 10px;
+    }
+    .weather-icon {
+        width: 50px;
+        height: 50px;
+    }
+footer {
+  position: fixed;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   padding: 10px 0;
+   background-color: #95da46;
+   text-align: center;
+}
+
+footer ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+footer ul li {
+    display: inline;
+}
+
+footer ul li::after {
+    content: "~";
+    margin: 0 5px;
+}
+
+footer ul li:last-child::after {
+    content: "";
+}
+
+footer ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+footer ul li a:hover {
+    text-decoration: underline;
+}
+.header {
+        background-color: #4CAF50;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+    .news-bar {
+        background-color: #f44336;
+        color: white;
+        padding: 10px;
+        text-align: center;
+    }
+    .footer {
+        background-color: #f2f2f2;
+        padding: 20px;
+        text-align: center;
+    }
+    .footer ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .footer ul li {
+        display: inline;
+    }
+    .footer ul li::after {
+        content: "~";
+        margin: 0 5px;
+    }
+    .footer ul li:last-child::after {
+        content: "";
+    }
+    .footer ul li a {
+        text-decoration: none;
+        color: #333;
+    }
+    .footer ul li a:hover {
+        text-decoration: underline;
+    }
+
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>5-Day Weather Forecast in the United States</h1>
+</div>
+<div class="news-bar">
+  <a class="weatherwidget-io" href="https://forecast7.com/en/47d61n122d33/seattle/?unit=us" data-label_1="SEATTLE" data-label_2="WEATHER" data-theme="orange" >SEATTLE WEATHER</a>
+<script>
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+</script>
+</div>
+<div class="container">
+<div class="container">
+    <h2>5-Day Weather Forecast</h2>
+    <form id="weather-form">
+        <label for="city">Enter US City Name Only :</label>
+        <input type="text" id="city" name="city" required pattern="[A-Za-z ]+" title="Please enter alphabetic characters only">
+        <input type="submit" value="Get Forecast">
+    </form>
+    <div id="weather-output"></div>
+</div>
+
+<script>
+document.getElementById("weather-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    var city = document.getElementById("city").value.trim();
+    fetchWeather(city);
+});
+
+function fetchWeather(city) {
+    var apiKey = "590244f8d1c839712b79dee7db6173d6"; // My OpenWeatherMap API key
+    var apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + ",US&appid=" + apiKey + "&units=imperial";
+
+    fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+        if (data.cod === "200") {
+            displayWeather(data);
+        } else {
+            document.getElementById("weather-output").innerHTML = "<p>Error: " + data.message + "</p>";
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById("weather-output").innerHTML = "<p>There was an error fetching weather data. Please try again later.</p>";
+    });
+}
+
+function displayWeather(data) {
+    var output = "<h3>5-Day Weather Forecast for " + data.city.name + "</h3>";
+    output += "<div class='forecast-container'>";
+    data.list.forEach(function(forecast) {
+        var date = new Date(forecast.dt * 1000);
+        var minTemp = forecast.main.temp_min.toFixed(1);
+        var maxTemp = forecast.main.temp_max.toFixed(1);
+        var humidity = forecast.main.humidity;
+        var weatherDesc = forecast.weather[0].description;
+        var iconCode = forecast.weather[0].icon;
+        var iconUrl = "https://openweathermap.org/img/w/" + iconCode + ".png";
+
+        output += "<div class='forecast-item'>";
+        output += "<p>Date: " + formatDate(date) + "</p>";
+        output += "<p>Temperature: " + minTemp + "°F - " + maxTemp + "°F</p>";
+        output += "<p>Humidity: " + humidity + "%</p>";
+        output += "<p>Description: " + weatherDesc + "</p>";
+        output += "<img class='weather-icon' src='" + iconUrl + "' alt='Weather Icon'>";
+        output += "</div>";
+    });
+    output += "</div>";
+    document.getElementById("weather-output").innerHTML = output;
+}
+
+function formatDate(date) {
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var day = date.getDate();
+    var month = months[date.getMonth()];
+    return month + " " + day;
+}
+</script>
+<footer>
+    <ul>
+        <li>&copy; 2024  by Abel Mengstu, All Rights Reserved ~</li>
+        <li><a id="html-checker" href="#" target="_blank">Check HTML</a> ~ <a id="css-checker" href="#" target="_blank">Check CSS</a></li>
+    </ul>
+    <script>
+        document.getElementById("html-checker").setAttribute("href", "https://validator.w3.org/nu/?doc=" + location.href);
+        document.getElementById("css-checker").setAttribute("href", "https://jigsaw.w3.org/css-validator/validator?uri=" + location.href);
+    </script>
+</footer>
+</body>
+</html>
