@@ -17,55 +17,137 @@
   const ctx = canvas.getContext('2d');
 
   // Set initial variables
-  let angle = 0;
-  const speed = 0.05;
+  let angle1 = 0;
+  let angle2 = 0;
+  let rotations = 0;
+  const speed = 0.005; // Adjusted speed for slower rotation
 
-  // Function to draw the pattern
-  function draw() {
+  // Function to draw the first phase (separate animations)
+  function drawPhase1() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save(); // Save the initial state
-
-    // Translate to the center of the canvas
-    ctx.translate(canvas.width / 2, canvas.height / 2);
 
     // Draw rotating lines
+    ctx.save();
+    ctx.translate(canvas.width / 4, canvas.height / 2); // Translate to the first location
     ctx.beginPath();
-    for (let i = 0; i < 360; i += 30) {
+    for (let i = 0; i < 360; i += 120) { // Angle adjusted to 120 for three equal sections
       ctx.moveTo(0, 0);
-      ctx.rotate(angle);
+      ctx.rotate(angle1);
       ctx.lineTo(150, 0);
       ctx.strokeStyle = `hsl(${i}, 100%, 50%)`; // Varying stroke color
       ctx.stroke();
     }
     ctx.closePath();
+    ctx.restore();
 
     // Draw rotating rectangles
+    ctx.save();
+    ctx.translate(canvas.width * 3 / 4, canvas.height / 2); // Translate to the second location
     ctx.beginPath();
-    for (let i = 0; i < 360; i += 45) {
-      ctx.rotate(angle);
+    for (let i = 0; i < 360; i += 120) { // Angle adjusted to 120 for three equal sections
+      ctx.rotate(angle2);
       ctx.rect(100, -20, 50, 40);
       ctx.fillStyle = `hsla(${i}, 100%, 50%, 0.7)`; // Varying fill color with alpha
       ctx.fill();
     }
     ctx.closePath();
+    ctx.restore();
 
     // Draw rotating arcs
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 4); // Translate to the third location
     ctx.beginPath();
-    for (let i = 0; i < 360; i += 60) {
-      ctx.rotate(angle);
+    for (let i = 0; i < 360; i += 120) { // Angle adjusted to 120 for three equal sections
+      ctx.rotate(angle1);
       ctx.arc(0, 0, 100, 0, Math.PI / 2);
       ctx.strokeStyle = `hsla(${i}, 100%, 50%, 0.5)`; // Varying stroke color with alpha
       ctx.stroke();
     }
     ctx.closePath();
+    ctx.restore();
 
-    ctx.restore(); // Restore the initial state
-    angle += speed;
+    angle1 += speed;
+    angle2 += speed;
 
-    requestAnimationFrame(draw); // Recursive animation loop
+    requestAnimationFrame(drawPhase1); // Recursive animation loop for phase 1
   }
 
-  draw(); // Start the animation
+  // Function to draw the second phase (together animation)
+  function drawPhase2() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw rotating Star of David
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 4); // Translate to the third location
+    ctx.beginPath();
+    ctx.rotate(angle1);
+    ctx.moveTo(0, -100);
+    for (let i = 1; i <= 6; i++) {
+      ctx.rotate(Math.PI / 3);
+      ctx.lineTo(0, -100);
+      ctx.rotate(Math.PI / 3);
+      ctx.lineTo(0, 100);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'blue';
+    ctx.stroke();
+    ctx.restore();
+
+    // Draw rotating pentagon
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height * 3 / 4); // Translate to the fourth location
+    ctx.beginPath();
+    ctx.rotate(angle2);
+    ctx.moveTo(0, -100);
+    for (let i = 1; i <= 5; i++) {
+      ctx.rotate((2 * Math.PI) / 5);
+      ctx.lineTo(0, -100);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'green';
+    ctx.stroke();
+    ctx.restore();
+
+    // Draw rotating lines
+    ctx.save();
+    ctx.translate(canvas.width / 4, canvas.height / 2); // Translate to the first location
+    ctx.beginPath();
+    for (let i = 0; i < 360; i += 120) { // Angle adjusted to 120 for three equal sections
+      ctx.moveTo(0, 0);
+      ctx.rotate(angle1);
+      ctx.lineTo(150, 0);
+      ctx.strokeStyle = `hsl(${i}, 100%, 50%)`; // Varying stroke color
+      ctx.stroke();
+    }
+    ctx.closePath();
+    ctx.restore();
+
+    // Draw rotating rectangles
+    ctx.save();
+    ctx.translate(canvas.width * 3 / 4, canvas.height / 2); // Translate to the second location
+    ctx.beginPath();
+    for (let i = 0; i < 360; i += 120) { // Angle adjusted to 120 for three equal sections
+      ctx.rotate(angle2);
+      ctx.rect(100, -20, 50, 40);
+      ctx.fillStyle = `hsla(${i}, 100%, 50%, 0.7)`; // Varying fill color with alpha
+      ctx.fill();
+    }
+    ctx.closePath();
+    ctx.restore();
+
+    angle1 += speed;
+    angle2 += speed;
+
+    requestAnimationFrame(drawPhase2); // Recursive animation loop for phase 2
+  }
+
+  // Start the first phase animation
+  drawPhase1();
+
+  // After three rotations, start the second phase animation
+  setTimeout(() => {
+    drawPhase2();
+  }, 3000); // 3000 milliseconds = 3 seconds
 </script>
 </body>
 </html>
