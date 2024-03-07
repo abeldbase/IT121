@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canvas Drawing</title>
+<style>
+  canvas {
+    border: 2px solid black;
+  }
+</style>
+</head>
+<body>
+<canvas id="myCanvas" width="900" height="600"></canvas>
+<script>
+  const canvas = document.getElementById('myCanvas');
+  const ctx = canvas.getContext('2d');
+
+  // Set initial variables
+  let angle = 0;
+  const speed = 0.05;
+
+  // Function to draw the pattern
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save(); // Save the initial state
+
+    // Translate to the center of the canvas
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+
+    // Draw rotating lines
+    ctx.beginPath();
+    for (let i = 0; i < 360; i += 30) {
+      ctx.moveTo(0, 0);
+      ctx.rotate(angle);
+      ctx.lineTo(150, 0);
+      ctx.strokeStyle = `hsl(${i}, 100%, 50%)`; // Varying stroke color
+      ctx.stroke();
+    }
+    ctx.closePath();
+
+    // Draw rotating rectangles
+    ctx.beginPath();
+    for (let i = 0; i < 360; i += 45) {
+      ctx.rotate(angle);
+      ctx.rect(100, -20, 50, 40);
+      ctx.fillStyle = `hsla(${i}, 100%, 50%, 0.7)`; // Varying fill color with alpha
+      ctx.fill();
+    }
+    ctx.closePath();
+
+    // Draw rotating arcs
+    ctx.beginPath();
+    for (let i = 0; i < 360; i += 60) {
+      ctx.rotate(angle);
+      ctx.arc(0, 0, 100, 0, Math.PI / 2);
+      ctx.strokeStyle = `hsla(${i}, 100%, 50%, 0.5)`; // Varying stroke color with alpha
+      ctx.stroke();
+    }
+    ctx.closePath();
+
+    ctx.restore(); // Restore the initial state
+    angle += speed;
+
+    requestAnimationFrame(draw); // Recursive animation loop
+  }
+
+  draw(); // Start the animation
+</script>
+</body>
+</html>
