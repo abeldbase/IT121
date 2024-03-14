@@ -1,0 +1,27 @@
+{
+  "name": "myapp",
+  "version": "1.0.0",
+  "description": "sample node",
+  "main": "index",
+  "dependencies": {
+    "corepack": "^0.23.0",
+    "npm": "^10.2.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm run integration-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abeldbase/IT121.git"
+  },
+  "keywords": [
+    "123456"
+  ],
+  "author": "Abel Mengstu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abeldbase/IT121/issues"
+  },
+  "homepage": "https://github.com/abeldbase/IT121#readme"
+}
